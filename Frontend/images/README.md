@@ -2,7 +2,28 @@
 
 This directory contains images used in the Study Pro Global website.
 
-## Required Images
+## **LOGO UPLOAD - ACTION REQUIRED**
+
+### Upload Your Logo Here
+**File name**: `logo.jpg` (exactly as named)
+
+The logo has been integrated into the website and will appear in:
+- Navigation header (automatically cropped to 50x50px with rounded corners)
+- Optimized for all devices
+
+**Logo Specifications:**
+- **Required file name**: `logo.jpg`
+- **Format**: JPG, PNG, or SVG (JPG recommended)
+- **Recommended dimensions**: 200x200px minimum (square format)
+- **File size**: Under 500KB
+- **Quality**: High resolution for crisp display
+
+**To Upload:**
+1. Place your `logo.jpg` file in this `Frontend/images/` directory
+2. Commit and push the file to the repository
+3. The logo will automatically display - no code changes needed!
+
+## Optional Images
 
 The following images are referenced in the website but are optional (the site has fallback handling):
 
@@ -30,3 +51,4 @@ To add images:
 
 - The website includes `onerror` handling, so if images are not available, they will be hidden gracefully
 - All images should be optimized for web to ensure fast loading
+- Logo will be automatically cropped and styled via CSS
