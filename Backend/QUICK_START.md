@@ -65,7 +65,7 @@ curl -X POST http://localhost:3000/api/v1/auth/register \
     "fullName": "John Doe",
     "email": "john@example.com",
     "password": "SecurePass123!",
-    "country": "Bangladesh"
+    "country": "USA"
   }'
 
 # Get subscription plans

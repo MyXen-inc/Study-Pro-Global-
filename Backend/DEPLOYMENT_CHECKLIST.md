@@ -161,7 +161,7 @@ curl -X POST https://www.studyproglobal.com.bd/api/v1/auth/register \
     "fullName": "Test User",
     "email": "test@example.com",
     "password": "TestPass123!",
-    "country": "Bangladesh"
+    "country": "USA"
   }'
 ```
 - [ ] Registration successful (201 Created)

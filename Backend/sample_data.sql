@@ -56,6 +56,6 @@ INSERT INTO courses (id, title, type, price, description, duration, content, is_
 -- Password: Admin@123
 -- Hashed with bcrypt rounds=10
 INSERT INTO users (id, full_name, email, password, country, subscription_type, role, is_active) VALUES
-('admin-001', 'System Administrator', 'admin@studyproglobal.com.bd', '$2a$10$X9TqvN7OcY5OJJ2xL0qh5.dH0gP6YGKrVL4HZLQk8W5XwVy5tn0Ry', 'Bangladesh', 'global', 'admin', TRUE);
+('admin-001', 'System Administrator', 'admin@studyproglobal.com.bd', '$2a$10$X9TqvN7OcY5OJJ2xL0qh5.dH0gP6YGKrVL4HZLQk8W5XwVy5tn0Ry', 'International', 'global', 'admin', TRUE);
 
 -- Note: This is a sample password hash. In production, you should create admin user through secure means

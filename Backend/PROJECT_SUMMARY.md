@@ -10,7 +10,7 @@ Successfully delivered a **complete, production-ready Backend API** for the Stud
 
 ### What Was Built
 
-A comprehensive REST API backend that powers an international university application platform for Bangladeshi students seeking to study abroad.
+A comprehensive REST API backend that powers an international university application platform for students worldwide seeking to study abroad.
 
 ### Technology Stack
 

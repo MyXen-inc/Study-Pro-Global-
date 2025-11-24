@@ -34,7 +34,7 @@ curl -X POST http://localhost:3000/api/v1/auth/register \
     "fullName": "John Doe",
     "email": "john.doe@example.com",
     "password": "SecurePass123!",
-    "country": "Bangladesh",
+    "country": "USA",
     "academicLevel": "bachelor"
   }'
 ```
@@ -50,7 +50,7 @@ Expected Response (201):
       "id": "uuid",
       "fullName": "John Doe",
       "email": "john.doe@example.com",
-      "country": "Bangladesh",
+      "country": "USA",
       "academicLevel": "bachelor",
       "subscriptionType": "free",
       "profileComplete": 57
@@ -121,8 +121,8 @@ curl -X PUT http://localhost:3000/api/v1/users/profile \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
-    "phone": "+8801712345678",
-    "address": "Dhaka, Bangladesh",
+    "phone": "+1234567890",
+    "address": "New York, USA",
     "dateOfBirth": "2000-01-15"
   }'
 ```
