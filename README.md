@@ -1,6 +1,6 @@
 # Study Pro Global - EdTech University Application Portal
 
-Welcome to Study Pro Global! A comprehensive EdTech platform for Bangladeshi students seeking to study abroad. Our platform simplifies foreign university applications with AI-powered support, subscription-based services, and cryptocurrency payment integration.
+Welcome to Study Pro Global! A comprehensive EdTech platform for students worldwide seeking to study abroad. Our platform simplifies foreign university applications with AI-powered support, subscription-based services, and cryptocurrency payment integration.
 
 **Value Proposition**: *"Your Partner in Global University Enrollment – Get Accepted and We Succeed Together"*
 
@@ -259,7 +259,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - 🤖 **AI-Powered Support**: 24/7 instant assistance
 - 🎓 **Commission-Driven Model**: Success aligned with student enrollment
-- 🇧🇩 **Bangladesh Focus**: Specifically designed for Bangladeshi students
+- 🌍 **Global Reach**: Designed for students worldwide from any country
 - 🌐 **100% Online Platform**: Accessible from anywhere
 - 🔒 **Secure Payments**: Multiple payment options including crypto
 
