@@ -14,8 +14,8 @@ This guide explains how to deploy Study Pro Global EdTech platform using cPanel'
 This repository includes a `.cpanel.yml` file that automates deployment when you push to GitHub. cPanel will automatically:
 
 1. Pull the latest code from GitHub
-2. Deploy Frontend to `public_html/`
-3. Deploy Backend to `studypro-backend/` (outside public_html for security)
+2. Deploy Frontend to `studyproglobal.com.bd/`
+3. Deploy Backend to `studypro-backend/` (outside public directory for security)
 4. Set proper file permissions
 5. Create necessary directories
 
@@ -199,7 +199,7 @@ Once configured, every time you push to GitHub:
    - Detects the push
    - Pulls the latest code
    - Runs `.cpanel.yml` deployment tasks
-   - Deploys Frontend to public_html
+   - Deploys Frontend to studyproglobal.com.bd
    - Deploys Backend to studypro-backend
    - Updates permissions
 

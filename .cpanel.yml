@@ -17,7 +17,7 @@ deployment:
     - chmod 644 $DEPLOYPATH/js/*.js
     - chmod 755 $DEPLOYPATH/images
     
-    # Deploy Backend to a separate directory (outside public_html for security)
+    # Deploy Backend to a separate directory (outside public directory for security)
     - export BACKENDPATH=/home/myxenpay/studypro-backend/
     - mkdir -p $BACKENDPATH
     - /bin/cp -R Backend/* $BACKENDPATH
