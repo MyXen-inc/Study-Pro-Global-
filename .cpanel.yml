@@ -1,0 +1,32 @@
+---
+deployment:
+  tasks:
+    # Deploy Frontend to public_html
+    - export DEPLOYPATH=/home/myxenpay/public_html/
+    - /bin/cp -R Frontend/* $DEPLOYPATH
+    
+    # Create necessary directories if they don't exist
+    - mkdir -p $DEPLOYPATH/images
+    - mkdir -p $DEPLOYPATH/css
+    - mkdir -p $DEPLOYPATH/js
+    
+    # Set proper permissions
+    - chmod 755 $DEPLOYPATH
+    - chmod 644 $DEPLOYPATH/*.html
+    - chmod 644 $DEPLOYPATH/css/*.css
+    - chmod 644 $DEPLOYPATH/js/*.js
+    - chmod 755 $DEPLOYPATH/images
+    
+    # Deploy Backend to a separate directory (outside public_html for security)
+    - export BACKENDPATH=/home/myxenpay/studypro-backend/
+    - mkdir -p $BACKENDPATH
+    - /bin/cp -R Backend/* $BACKENDPATH
+    
+    # Set Backend permissions
+    - chmod 755 $BACKENDPATH
+    - chmod 600 $BACKENDPATH/.env.production 2>/dev/null || true
+    - chmod 700 $BACKENDPATH/deploy.sh 2>/dev/null || true
+    
+    # Create logs directory
+    - mkdir -p /home/myxenpay/logs
+    - chmod 755 /home/myxenpay/logs

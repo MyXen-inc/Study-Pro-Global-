@@ -1,0 +1,83 @@
+# Dependencies
+node_modules/
+bower_components/
+vendor/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+*.env
+!.env.example
+Backend/.env.production
+Backend/.env
+
+# Backend
+Backend/node_modules/
+Backend/.env
+Backend/dist/
+Backend/build/
+Backend/__pycache__/
+Backend/*.pyc
+Backend/venv/
+Backend/.venv/
+Backend/*.log
+Backend/.pytest_cache/
+
+# Mobile
+Mobile/node_modules/
+Mobile/.expo/
+Mobile/.expo-shared/
+Mobile/dist/
+Mobile/build/
+Mobile/ios/Pods/
+Mobile/ios/build/
+Mobile/android/build/
+Mobile/android/app/build/
+Mobile/*.jks
+Mobile/*.keystore
+Mobile/.gradle/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+.nuxt/
+
+# Testing
+coverage/
+.nyc_output/
+*.cover
+.coverage
+.coverage.*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
