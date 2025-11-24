@@ -8,6 +8,9 @@ vendor/
 .env.local
 .env.*.local
 *.env
+!.env.example
+Backend/.env.production
+Backend/.env
 
 # Backend
 Backend/node_modules/
