@@ -2,7 +2,17 @@
 
 ## Overview
 
-Study Pro Global uses a multi-subdomain architecture for better organization and scalability:
+Study Pro Global uses a multi-subdomain architecture across two domains for better organization and scalability:
+
+**Why Two Domains?**
+- **studyproglobal.com** - Primary frontend domain for public-facing website
+- **studyproglobal.com.bd** - Backend services domain for API, mobile, and admin interfaces
+
+This separation provides:
+- Better load distribution
+- Enhanced security (API isolated from frontend)
+- Geographical flexibility
+- Easier scaling of individual services
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -51,6 +61,15 @@ Study Pro Global uses a multi-subdomain architecture for better organization and
 - **Domain**: studyproglobal.com.bd
 - **Location**: `/home/myxenpay/studypro-backend-admin/`
 - **Technology**: Admin panel for content management
+
+## Quick Reference
+
+| Service | URL | Domain | Purpose |
+|---------|-----|--------|---------|
+| Frontend | https://www.studyproglobal.com | .com | Public website |
+| Backend API | https://api.studyproglobal.com.bd | .com.bd | REST API |
+| Mobile | https://mobile.studyproglobal.com.bd | .com.bd | Mobile interface |
+| Admin | https://studypro-backend.studyproglobal.com.bd | .com.bd | Admin panel |
 
 ## cPanel Setup Instructions
 
@@ -281,6 +300,8 @@ Expected response:
    git pull origin main
    # Copy Backend directory contents
    cp -r Backend/* .
+   # Note: API directory contains documentation only, not deployable code
+   npm install --production
    bash scripts/deploy.sh
    pm2 restart studyproglobal-api
    ```
