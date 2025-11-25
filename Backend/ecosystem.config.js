@@ -3,7 +3,7 @@ module.exports = {
     name: 'studyproglobal-api',
     script: 'server.js',
     cwd: '/home/myxenpay/studypro-backend',
-    instances: 2,
+    instances: process.env.PM2_INSTANCES || 2,
     exec_mode: 'cluster',
     autorestart: true,
     watch: false,
