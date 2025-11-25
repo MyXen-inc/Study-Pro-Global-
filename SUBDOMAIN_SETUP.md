@@ -226,7 +226,7 @@ Expected response:
 ```
 
 ### Test Frontend to API Communication
-1. Open `https://www.studyproglobal.com.bd`
+1. Open `https://www.studyproglobal.com`
 2. Open browser console (F12)
 3. Check Network tab for API requests to `api.studyproglobal.com.bd`
 4. Verify no CORS errors
