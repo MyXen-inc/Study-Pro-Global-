@@ -2,10 +2,10 @@ const mysql = require('mysql2/promise');
 
 // Create database connection pool
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'server10.cloudswebserver.com',
-  user: process.env.DB_USER || 'myxenpay_studyproglobal',
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME || 'myxenpay_studyproglobal',
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME || 'studyproglobal',
   port: parseInt(process.env.DB_PORT) || 3306,
   waitForConnections: true,
   connectionLimit: 10,
@@ -50,10 +50,13 @@ async function initializeDatabase() {
         profile_complete INT DEFAULT 0,
         role VARCHAR(20) DEFAULT 'student',
         is_active BOOLEAN DEFAULT true,
+        reset_token VARCHAR(255),
+        reset_token_expires DATETIME,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         INDEX idx_email (email),
-        INDEX idx_subscription (subscription_type)
+        INDEX idx_subscription (subscription_type),
+        INDEX idx_reset_token (reset_token)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
     `);
 
@@ -222,6 +225,98 @@ async function initializeDatabase() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (conversation_id) REFERENCES chat_conversations(id) ON DELETE CASCADE,
         INDEX idx_conversation (conversation_id)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    `);
+
+    // Consultations table
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS consultations (
+        id VARCHAR(36) PRIMARY KEY,
+        user_id VARCHAR(36) NOT NULL,
+        consultant_name VARCHAR(255),
+        consultation_type VARCHAR(50) NOT NULL,
+        scheduled_at DATETIME NOT NULL,
+        duration_minutes INT DEFAULT 30,
+        status VARCHAR(50) DEFAULT 'scheduled',
+        notes TEXT,
+        meeting_link VARCHAR(500),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        INDEX idx_user (user_id),
+        INDEX idx_status (status),
+        INDEX idx_scheduled (scheduled_at)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    `);
+
+    // Support tickets table
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS support_tickets (
+        id VARCHAR(36) PRIMARY KEY,
+        user_id VARCHAR(36) NOT NULL,
+        subject VARCHAR(255) NOT NULL,
+        category VARCHAR(50) DEFAULT 'general',
+        priority VARCHAR(20) DEFAULT 'medium',
+        status VARCHAR(50) DEFAULT 'open',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        closed_at DATETIME,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        INDEX idx_user (user_id),
+        INDEX idx_status (status),
+        INDEX idx_priority (priority)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    `);
+
+    // Support ticket messages table
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS ticket_messages (
+        id VARCHAR(36) PRIMARY KEY,
+        ticket_id VARCHAR(36) NOT NULL,
+        user_id VARCHAR(36) NOT NULL,
+        message TEXT NOT NULL,
+        is_staff_reply BOOLEAN DEFAULT false,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (ticket_id) REFERENCES support_tickets(id) ON DELETE CASCADE,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        INDEX idx_ticket (ticket_id)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    `);
+
+    // Course enrollments table
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS course_enrollments (
+        id VARCHAR(36) PRIMARY KEY,
+        user_id VARCHAR(36) NOT NULL,
+        course_id VARCHAR(36) NOT NULL,
+        enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        completed_at DATETIME,
+        progress INT DEFAULT 0,
+        status VARCHAR(50) DEFAULT 'active',
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE,
+        UNIQUE KEY unique_enrollment (user_id, course_id),
+        INDEX idx_user (user_id),
+        INDEX idx_course (course_id)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    `);
+
+    // Scholarship applications table
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS scholarship_applications (
+        id VARCHAR(36) PRIMARY KEY,
+        user_id VARCHAR(36) NOT NULL,
+        scholarship_id VARCHAR(36) NOT NULL,
+        status VARCHAR(50) DEFAULT 'pending',
+        application_data JSON,
+        submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY (scholarship_id) REFERENCES scholarships(id) ON DELETE CASCADE,
+        UNIQUE KEY unique_application (user_id, scholarship_id),
+        INDEX idx_user (user_id),
+        INDEX idx_scholarship (scholarship_id),
+        INDEX idx_status (status)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
     `);
 

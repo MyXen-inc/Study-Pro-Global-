@@ -102,16 +102,35 @@ router.post('/:id/enroll', verifyToken, async (req, res) => {
 
     const course = courses[0];
 
+    // Check if already enrolled
+    const [existingEnrollment] = await pool.query(
+      'SELECT id FROM course_enrollments WHERE user_id = ? AND course_id = ?',
+      [req.user.userId, id]
+    );
+
+    if (existingEnrollment.length > 0) {
+      return errorResponse(res, 409, 'ALREADY_ENROLLED', 'You are already enrolled in this course');
+    }
+
     // For paid courses, check if payment is made
     if (course.type === 'paid' && course.price > 0) {
       // In production, verify payment before enrollment
-      // For now, we'll just create enrollment record
+      // For now, allow enrollment for demo purposes
     }
 
-    // Create enrollment record (you would need an enrollments table)
-    // For now, return success message
+    // Create enrollment record
+    const crypto = require('crypto');
+    const enrollmentId = crypto.randomUUID();
+
+    await pool.query(
+      `INSERT INTO course_enrollments (id, user_id, course_id, status, progress)
+       VALUES (?, ?, ?, 'active', 0)`,
+      [enrollmentId, req.user.userId, id]
+    );
+
     return successResponse(res, {
       message: 'Course enrollment successful',
+      enrollmentId,
       courseId: course.id,
       courseTitle: course.title,
       enrolledAt: new Date().toISOString()
@@ -126,11 +145,28 @@ router.post('/:id/enroll', verifyToken, async (req, res) => {
 // Get user enrollments
 router.get('/my/enrollments', verifyToken, async (req, res) => {
   try {
-    // This would query an enrollments table
-    // For now, return empty array as placeholder
+    const [enrollments] = await pool.query(
+      `SELECT ce.*, c.title, c.type, c.description, c.duration
+       FROM course_enrollments ce
+       JOIN courses c ON ce.course_id = c.id
+       WHERE ce.user_id = ?
+       ORDER BY ce.enrolled_at DESC`,
+      [req.user.userId]
+    );
+
     return successResponse(res, {
-      enrollments: [],
-      message: 'Enrollment tracking to be implemented'
+      enrollments: enrollments.map(e => ({
+        id: e.id,
+        courseId: e.course_id,
+        courseTitle: e.title,
+        courseType: e.type,
+        courseDescription: e.description,
+        courseDuration: e.duration,
+        progress: e.progress,
+        status: e.status,
+        enrolledAt: e.enrolled_at,
+        completedAt: e.completed_at
+      }))
     });
 
   } catch (error) {

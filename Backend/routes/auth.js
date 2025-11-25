@@ -221,4 +221,220 @@ router.get('/me', verifyToken, async (req, res) => {
   }
 });
 
+// Update user profile
+router.put('/profile', verifyToken, [
+  body('fullName').optional().trim(),
+  body('phone').optional().trim(),
+  body('address').optional().trim(),
+  body('dateOfBirth').optional().isISO8601().withMessage('Invalid date format'),
+  body('country').optional().trim(),
+  body('academicLevel').optional().trim()
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return errorResponse(res, 400, 'VALIDATION_ERROR', 'Invalid input data', {
+        errors: errors.array()
+      });
+    }
+
+    const { fullName, phone, address, dateOfBirth, country, academicLevel } = req.body;
+
+    // Get current user data
+    const [currentUser] = await pool.query(
+      'SELECT * FROM users WHERE id = ?',
+      [req.user.userId]
+    );
+
+    if (currentUser.length === 0) {
+      return errorResponse(res, 404, 'USER_NOT_FOUND', 'User not found');
+    }
+
+    // Build update query
+    const updates = {};
+    if (fullName !== undefined) updates.full_name = fullName;
+    if (phone !== undefined) updates.phone = phone;
+    if (address !== undefined) updates.address = address;
+    if (dateOfBirth !== undefined) updates.date_of_birth = dateOfBirth;
+    if (country !== undefined) updates.country = country;
+    if (academicLevel !== undefined) updates.academic_level = academicLevel;
+
+    if (Object.keys(updates).length === 0) {
+      return errorResponse(res, 400, 'NO_UPDATES', 'No fields to update');
+    }
+
+    // Calculate new profile completion
+    const updatedUser = { ...currentUser[0], ...updates };
+    updates.profile_complete = calculateProfileCompletion(updatedUser);
+
+    // Update user
+    const updateFields = Object.keys(updates).map(key => `${key} = ?`).join(', ');
+    const updateValues = [...Object.values(updates), req.user.userId];
+
+    await pool.query(
+      `UPDATE users SET ${updateFields} WHERE id = ?`,
+      updateValues
+    );
+
+    // Get updated user
+    const [users] = await pool.query(
+      'SELECT id, full_name, email, country, academic_level, phone, address, date_of_birth, subscription_type, profile_complete FROM users WHERE id = ?',
+      [req.user.userId]
+    );
+
+    return successResponse(res, {
+      message: 'Profile updated successfully',
+      user: {
+        id: users[0].id,
+        fullName: users[0].full_name,
+        email: users[0].email,
+        country: users[0].country,
+        academicLevel: users[0].academic_level,
+        phone: users[0].phone,
+        address: users[0].address,
+        dateOfBirth: users[0].date_of_birth,
+        subscriptionType: users[0].subscription_type,
+        profileComplete: users[0].profile_complete
+      }
+    });
+
+  } catch (error) {
+    console.error('Update profile error:', error);
+    return errorResponse(res, 500, 'UPDATE_FAILED', 'Failed to update profile');
+  }
+});
+
+// Forgot password - request reset
+router.post('/forgot-password', [
+  body('email').isEmail().withMessage('Valid email is required')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return errorResponse(res, 400, 'VALIDATION_ERROR', 'Invalid input data', {
+        errors: errors.array()
+      });
+    }
+
+    const { email } = req.body;
+
+    // Check if user exists
+    const [users] = await pool.query(
+      'SELECT id, full_name FROM users WHERE email = ?',
+      [email]
+    );
+
+    // Always return success to prevent email enumeration
+    if (users.length === 0) {
+      return successResponse(res, {
+        message: 'If an account exists with this email, you will receive a password reset link.'
+      });
+    }
+
+    // Generate reset token
+    const resetToken = generateUUID();
+    const resetExpires = new Date(Date.now() + 3600000); // 1 hour
+
+    // Store reset token (in production, store hashed token)
+    await pool.query(
+      `UPDATE users SET reset_token = ?, reset_token_expires = ? WHERE id = ?`,
+      [resetToken, resetExpires, users[0].id]
+    );
+
+    // In production, send email with reset link
+    // For now, just log the token
+    console.log(`Password reset token for ${email}: ${resetToken}`);
+
+    return successResponse(res, {
+      message: 'If an account exists with this email, you will receive a password reset link.'
+    });
+
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    return errorResponse(res, 500, 'REQUEST_FAILED', 'Failed to process password reset request');
+  }
+});
+
+// Reset password
+router.post('/reset-password', [
+  body('token').notEmpty().withMessage('Reset token is required'),
+  body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return errorResponse(res, 400, 'VALIDATION_ERROR', 'Invalid input data', {
+        errors: errors.array()
+      });
+    }
+
+    const { token, password } = req.body;
+
+    // Find user with valid reset token
+    const [users] = await pool.query(
+      'SELECT id FROM users WHERE reset_token = ? AND reset_token_expires > NOW()',
+      [token]
+    );
+
+    if (users.length === 0) {
+      return errorResponse(res, 400, 'INVALID_TOKEN', 'Invalid or expired reset token');
+    }
+
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(password, parseInt(process.env.BCRYPT_ROUNDS) || 10);
+
+    // Update password and clear reset token
+    await pool.query(
+      'UPDATE users SET password = ?, reset_token = NULL, reset_token_expires = NULL WHERE id = ?',
+      [hashedPassword, users[0].id]
+    );
+
+    return successResponse(res, {
+      message: 'Password reset successfully. Please login with your new password.'
+    });
+
+  } catch (error) {
+    console.error('Reset password error:', error);
+    return errorResponse(res, 500, 'RESET_FAILED', 'Failed to reset password');
+  }
+});
+
+// Refresh token
+router.post('/refresh', verifyToken, async (req, res) => {
+  try {
+    // Get current user
+    const [users] = await pool.query(
+      'SELECT id, email, subscription_type, role FROM users WHERE id = ? AND is_active = true',
+      [req.user.userId]
+    );
+
+    if (users.length === 0) {
+      return errorResponse(res, 401, 'INVALID_USER', 'User not found or inactive');
+    }
+
+    const user = users[0];
+
+    // Generate new token
+    const token = jwt.sign(
+      {
+        userId: user.id,
+        email: user.email,
+        subscriptionType: user.subscription_type,
+        role: user.role
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+    );
+
+    return successResponse(res, {
+      token,
+      expiresIn: process.env.JWT_EXPIRES_IN || '7d'
+    });
+
+  } catch (error) {
+    console.error('Refresh token error:', error);
+    return errorResponse(res, 500, 'REFRESH_FAILED', 'Failed to refresh token');
+  }
+});
+
 module.exports = router;

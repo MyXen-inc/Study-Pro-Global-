@@ -5,9 +5,17 @@ const helmet = require('helmet');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const { testConnection, initializeDatabase } = require('./config/database');
+const { logger } = require('./utils/logger');
+const { addRequestId } = require('./middleware/errorHandler');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Add request ID to all requests
+app.use(addRequestId);
+
+// Request logging
+app.use(logger.requestLogger);
 
 // Security middleware
 app.use(helmet());
@@ -39,31 +47,52 @@ app.use('/api/', limiter);
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const universityRoutes = require('./routes/universities');
+const programRoutes = require('./routes/programs');
 const applicationRoutes = require('./routes/applications');
 const subscriptionRoutes = require('./routes/subscriptions');
 const paymentRoutes = require('./routes/payments');
 const scholarshipRoutes = require('./routes/scholarships');
 const courseRoutes = require('./routes/courses');
+const consultationRoutes = require('./routes/consultations');
+const supportRoutes = require('./routes/support');
 const chatRoutes = require('./routes/chat');
 
 // API routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/universities', universityRoutes);
+app.use('/api/v1/programs', programRoutes);
 app.use('/api/v1/applications', applicationRoutes);
 app.use('/api/v1/subscriptions', subscriptionRoutes);
 app.use('/api/v1/payments', paymentRoutes);
 app.use('/api/v1/scholarships', scholarshipRoutes);
 app.use('/api/v1/courses', courseRoutes);
+app.use('/api/v1/consultations', consultationRoutes);
+app.use('/api/v1/support', supportRoutes);
 app.use('/api/v1/chat', chatRoutes);
 
 // Health check endpoint
-app.get('/api/health', (req, res) => {
+app.get('/api/health', async (req, res) => {
+  let dbStatus = 'unknown';
+  try {
+    const dbConnected = await testConnection();
+    dbStatus = dbConnected ? 'connected' : 'disconnected';
+  } catch (error) {
+    dbStatus = 'error';
+  }
+
   res.json({
     success: true,
     message: 'Study Pro Global API is running',
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || 'development',
+    version: '1.0.0',
+    uptime: process.uptime(),
+    database: dbStatus,
+    memory: {
+      used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + 'MB',
+      total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024) + 'MB'
+    }
   });
 });
 

@@ -1,6 +1,6 @@
 const express = require('express');
 const { pool } = require('../config/database');
-const { optionalAuth, requireSubscription } = require('../middleware/auth');
+const { optionalAuth, verifyToken, requireSubscription } = require('../middleware/auth');
 const { errorResponse, successResponse } = require('../utils/helpers');
 
 const router = express.Router();
@@ -171,6 +171,93 @@ router.post('/auto-match', requireSubscription('global'), async (req, res) => {
   } catch (error) {
     console.error('Auto-match scholarships error:', error);
     return errorResponse(res, 500, 'MATCH_FAILED', 'Failed to match scholarships');
+  }
+});
+
+// Apply for scholarship
+router.post('/:id/apply', verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { applicationData } = req.body;
+
+    // Check if scholarship exists
+    const [scholarships] = await pool.query(
+      'SELECT * FROM scholarships WHERE id = ?',
+      [id]
+    );
+
+    if (scholarships.length === 0) {
+      return errorResponse(res, 404, 'SCHOLARSHIP_NOT_FOUND', 'Scholarship not found');
+    }
+
+    const scholarship = scholarships[0];
+
+    // Check if deadline has passed
+    if (scholarship.deadline && new Date(scholarship.deadline) < new Date()) {
+      return errorResponse(res, 400, 'DEADLINE_PASSED', 'The scholarship deadline has passed');
+    }
+
+    // Check if already applied
+    const [existingApplications] = await pool.query(
+      'SELECT id FROM scholarship_applications WHERE user_id = ? AND scholarship_id = ?',
+      [req.user.userId, id]
+    );
+
+    if (existingApplications.length > 0) {
+      return errorResponse(res, 409, 'ALREADY_APPLIED', 'You have already applied for this scholarship');
+    }
+
+    // Create application
+    const { generateUUID } = require('../utils/helpers');
+    const applicationId = generateUUID();
+
+    await pool.query(
+      `INSERT INTO scholarship_applications (id, user_id, scholarship_id, status, application_data)
+       VALUES (?, ?, ?, 'pending', ?)`,
+      [applicationId, req.user.userId, id, JSON.stringify(applicationData || {})]
+    );
+
+    return successResponse(res, {
+      message: 'Scholarship application submitted successfully',
+      applicationId,
+      scholarshipName: scholarship.name,
+      status: 'pending'
+    }, 201);
+
+  } catch (error) {
+    console.error('Apply for scholarship error:', error);
+    return errorResponse(res, 500, 'APPLICATION_FAILED', 'Failed to apply for scholarship');
+  }
+});
+
+// Get user's scholarship applications
+router.get('/my-applications', verifyToken, async (req, res) => {
+  try {
+    const [applications] = await pool.query(
+      `SELECT sa.*, s.name as scholarship_name, s.country, s.amount, s.deadline
+       FROM scholarship_applications sa
+       JOIN scholarships s ON sa.scholarship_id = s.id
+       WHERE sa.user_id = ?
+       ORDER BY sa.submitted_at DESC`,
+      [req.user.userId]
+    );
+
+    return successResponse(res, {
+      applications: applications.map(app => ({
+        id: app.id,
+        scholarshipId: app.scholarship_id,
+        scholarshipName: app.scholarship_name,
+        country: app.country,
+        amount: app.amount,
+        deadline: app.deadline,
+        status: app.status,
+        submittedAt: app.submitted_at
+      }))
+    });
+
+  } catch (error) {
+    console.error('Get scholarship applications error:', error);
+    return errorResponse(res, 500, 'FETCH_FAILED', 'Failed to fetch scholarship applications');
   }
 });
 
