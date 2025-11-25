@@ -6,8 +6,8 @@ This guide explains how to deploy Study Pro Global EdTech platform using cPanel'
 
 - cPanel account with Git Version Control feature enabled
 - Access to www.studyproglobal.com.bd domain
-- MySQL database: `myxenpay_studyproglobal`
-- Server: server10.cloudswebserver.com
+- MySQL database configured
+- Server with Node.js support
 
 ## Deployment Method
 
@@ -23,40 +23,40 @@ This repository includes a `.cpanel.yml` file that automates deployment when you
 
 ### Step 1: Connect Repository to cPanel
 
-1. Log into cPanel at: https://server10.cloudswebserver.com:2083
+1. Log into cPanel
 2. Navigate to **Git Version Control** (under Files section)
 3. Click **Create** to add a new repository
 4. Fill in the details:
    - **Clone URL**: `https://github.com/MyXen-inc/Study-Pro-Global-.git`
-   - **Repository Path**: `/home/myxenpay/repository`
+   - **Repository Path**: `/home/username/repository`
    - **Repository Name**: `Study-Pro-Global`
-   - **Branch**: `copilot/create-student-study-abroad-website` (or your main branch)
+   - **Branch**: `main` (or your main branch)
 5. Click **Create**
 
 ### Step 2: Configure Deployment
 
 The `.cpanel.yml` file is already configured and will automatically:
 
-- Deploy Frontend files to `/home/myxenpay/studyproglobal.com.bd/`
-- Deploy Backend files to `/home/myxenpay/studypro-backend/`
+- Deploy Frontend files to `/home/username/studyproglobal.com.bd/`
+- Deploy Backend files to `/home/username/studypro-backend/`
 - Set appropriate permissions
 - Create necessary directories
 
 ### Step 3: Set Up Database Connection
 
 1. In cPanel, go to **MySQL Databases**
-2. Verify database exists: `myxenpay_studyproglobal`
-3. Verify user has privileges: `myxenpay_studyproglobal`
-4. If needed, add user to database with ALL PRIVILEGES
+2. Create a database for the application
+3. Create a database user with a strong password
+4. Add user to database with ALL PRIVILEGES
 
 ### Step 4: Configure Environment Variables
 
 1. SSH into your server or use cPanel File Manager
-2. Navigate to `/home/myxenpay/studypro-backend/`
+2. Navigate to `/home/username/studypro-backend/`
 3. Create `.env.production` file from the template:
 
 ```bash
-cd /home/myxenpay/studypro-backend/
+cd /home/username/studypro-backend/
 cp .env.example .env.production
 nano .env.production
 ```
@@ -70,13 +70,15 @@ PORT=3000
 API_URL=https://www.studyproglobal.com.bd/api
 
 # Database Configuration (MySQL)
+# IMPORTANT: Use your actual credentials, never commit to version control!
 DB_HOST=localhost
 DB_PORT=3306
-DB_NAME=myxenpay_studyproglobal
-DB_USER=myxenpay_studyproglobal
-DB_PASSWORD=Nazmuzsakib01715@@##
+DB_NAME=your_database_name
+DB_USER=your_database_user
+DB_PASSWORD=your_secure_database_password
 
 # Generate secure secrets for production:
+# Run: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 JWT_SECRET=your_secure_jwt_secret_here_minimum_32_characters
 SESSION_SECRET=your_secure_session_secret_here_minimum_32_characters
 

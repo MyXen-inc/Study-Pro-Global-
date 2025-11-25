@@ -72,13 +72,18 @@ nano .env
 Required configurations:
 - [ ] `NODE_ENV=production`
 - [ ] `PORT=3000`
-- [ ] `DB_HOST=server10.cloudswebserver.com`
-- [ ] `DB_USER=myxenpay_studyproglobal`
-- [ ] `DB_PASSWORD=Nazmuzsakib01715@@##` (or updated password)
-- [ ] `DB_NAME=myxenpay_studyproglobal`
-- [ ] `JWT_SECRET` (pre-filled, secure)
-- [ ] `SESSION_SECRET` (pre-filled, secure)
+- [ ] `DB_HOST=your_database_host`
+- [ ] `DB_USER=your_database_user`
+- [ ] `DB_PASSWORD=your_secure_password`
+- [ ] `DB_NAME=your_database_name`
+- [ ] `JWT_SECRET` (generate a secure random string)
+- [ ] `SESSION_SECRET` (generate a secure random string)
 - [ ] `CORS_ORIGIN=https://www.studyproglobal.com.bd`
+
+Generate secure secrets:
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
 
 Optional but recommended:
 - [ ] `SMTP_USER` and `SMTP_PASSWORD` (for email notifications)
@@ -173,12 +178,12 @@ curl -X POST https://www.studyproglobal.com.bd/api/v1/auth/register \
 ./setup_database.sh
 # Choose option 2
 ```
-Or manually:
+Or manually (use your credentials from .env):
 ```bash
-mysql -h server10.cloudswebserver.com \
-  -u myxenpay_studyproglobal \
-  -p'Nazmuzsakib01715@@##' \
-  myxenpay_studyproglobal < sample_data.sql
+mysql -h $DB_HOST \
+  -u $DB_USER \
+  -p$DB_PASSWORD \
+  $DB_NAME < sample_data.sql
 ```
 - [ ] Sample data imported successfully
 - [ ] Universities, programs, scholarships, courses available

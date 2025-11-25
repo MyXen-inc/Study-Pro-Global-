@@ -245,10 +245,11 @@ pm2 logs studyproglobal-api --lines 100
 
 ### Database Backup
 ```bash
-mysqldump -h server10.cloudswebserver.com \
-  -u myxenpay_studyproglobal \
-  -p'Nazmuzsakib01715@@##' \
-  myxenpay_studyproglobal > backup_$(date +%Y%m%d).sql
+# Use environment variables from your .env file
+mysqldump -h $DB_HOST \
+  -u $DB_USER \
+  -p$DB_PASSWORD \
+  $DB_NAME > backup_$(date +%Y%m%d).sql
 ```
 
 ## Security Checklist
@@ -280,10 +281,10 @@ cat /home/myxenpay/studypro-backend/.env
 
 ### Database connection error
 ```bash
-# Test database connection
-mysql -h server10.cloudswebserver.com \
-  -u myxenpay_studyproglobal \
-  -p'Nazmuzsakib01715@@##' \
+# Test database connection (use your credentials from .env)
+mysql -h $DB_HOST \
+  -u $DB_USER \
+  -p$DB_PASSWORD \
   -e "SELECT VERSION(); SHOW DATABASES;"
 ```
 

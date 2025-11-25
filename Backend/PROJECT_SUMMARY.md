@@ -211,12 +211,11 @@ A comprehensive REST API backend that powers an international university applica
 ### Server Configuration
 
 ```
-Production Server: server10.cloudswebserver.com
 Domain: www.studyproglobal.com.bd
-Database: myxenpay_studyproglobal
+Database: (configured in .env file)
 
 Directory Structure:
-/home/myxenpay/
+/home/username/
 ├── studyproglobal.com.bd/     # Frontend (existing)
 └── studypro-backend/          # Backend (new)
     ├── server.js
@@ -224,7 +223,7 @@ Directory Structure:
     ├── routes/
     ├── middleware/
     ├── utils/
-    ├── .env                   # Configuration
+    ├── .env                   # Configuration (not in version control)
     └── node_modules/
 ```
 

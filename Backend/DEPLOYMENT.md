@@ -1,11 +1,10 @@
 # Study Pro Global - Production Deployment Guide
 
-## Server Credentials
+## Server Information
 
-**Production Server**: server10.cloudswebserver.com  
 **Domain**: www.studyproglobal.com.bd  
-**Database Name**: myxenpay_studyproglobal  
-**Database User**: myxenpay_studyproglobal  
+
+**Note**: All server credentials should be stored securely in `.env` files and never committed to version control.
 
 ---
 
@@ -14,7 +13,7 @@
 Before deploying, ensure you have:
 
 1. **Node.js** (v16+ or v18+) installed on the server
-2. **MySQL/MariaDB** database access (credentials provided)
+2. **MySQL/MariaDB** database access (credentials in secure `.env` file)
 3. **PM2** or similar process manager for Node.js
 4. **Nginx** or Apache configured as reverse proxy
 5. **SSL Certificate** for HTTPS (Let's Encrypt recommended)
@@ -136,8 +135,8 @@ AWS_SECRET_ACCESS_KEY=<your_aws_secret>
 ### 3.4 Database Setup
 
 ```bash
-# Connect to MySQL database
-mysql -h server10.cloudswebserver.com -u myxenpay_studyproglobal -p myxenpay_studyproglobal
+# Connect to MySQL database (use your credentials from .env)
+mysql -h $DB_HOST -u $DB_USER -p $DB_NAME
 
 # Run database migrations (create tables)
 # This should be done through your backend application
@@ -400,11 +399,14 @@ nano /home/backup-db.sh
 
 ```bash
 #!/bin/bash
+# Load environment variables
+source /home/myxenpay/studypro-backend/.env
+
 DATE=$(date +%Y%m%d_%H%M%S)
-mysqldump -h server10.cloudswebserver.com \
-  -u myxenpay_studyproglobal \
-  -p'Nazmuzsakib01715@@##' \
-  myxenpay_studyproglobal > /backups/db_$DATE.sql
+mysqldump -h $DB_HOST \
+  -u $DB_USER \
+  -p$DB_PASSWORD \
+  $DB_NAME > /backups/db_$DATE.sql
   
 # Keep only last 7 days
 find /backups/ -name "db_*.sql" -mtime +7 -delete

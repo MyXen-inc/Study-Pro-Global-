@@ -1,47 +1,57 @@
-# Study Pro Global - Server Credentials
+# Study Pro Global - Server Configuration Guide
 
 ## Production Server Information
 
-**⚠️ IMPORTANT: This file contains sensitive information. DO NOT share publicly.**
+**⚠️ SECURITY NOTICE: Never commit actual credentials to version control!**
 
-### Server Access
+All sensitive credentials should be stored in:
+1. A secure `.env` file on the server (listed in `.gitignore`)
+2. A secure secrets management system
+3. Environment variables set directly on the server
 
-- **Server Address**: `server10.cloudswebserver.com`
+### Server Setup
+
 - **Domain**: `www.studyproglobal.com.bd`
 - **Protocol**: HTTPS (SSL Certificate required)
-
-### Database Credentials
-
-- **Database Host**: `server10.cloudswebserver.com`
-- **Database Port**: `3306` (MySQL default)
-- **Database Name**: `myxenpay_studyproglobal`
-- **Database User**: `myxenpay_studyproglobal`
-- **Database Password**: `Nazmuzsakib01715@@##`
 - **Database Type**: MySQL/MariaDB
+
+### Environment Variable Configuration
+
+Create a `.env` file on your production server using `.env.example` as a template:
+
+```bash
+# Copy the example file
+cp .env.example .env
+
+# Edit and add your actual credentials
+nano .env
+```
+
+**Required Environment Variables:**
+- `DB_HOST` - Your database host
+- `DB_PORT` - Database port (default: 3306)
+- `DB_NAME` - Your database name
+- `DB_USER` - Your database username
+- `DB_PASSWORD` - Your database password
+- `JWT_SECRET` - A secure random secret for JWT tokens
+- `SESSION_SECRET` - A secure random secret for sessions
+
+Generate secure secrets:
+```bash
+# Generate a secure JWT secret
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
 
 ### Connection String Examples
 
+All examples below use environment variables. Replace placeholders with actual values in your `.env` file only.
+
 #### MySQL Command Line
 ```bash
-mysql -h server10.cloudswebserver.com \
-      -u myxenpay_studyproglobal \
-      -p'Nazmuzsakib01715@@##' \
-      myxenpay_studyproglobal
-```
-
-#### Node.js (Sequelize)
-```javascript
-const sequelize = new Sequelize(
-  'myxenpay_studyproglobal',
-  'myxenpay_studyproglobal',
-  'Nazmuzsakib01715@@##',
-  {
-    host: 'server10.cloudswebserver.com',
-    dialect: 'mysql',
-    port: 3306,
-    logging: false
-  }
-);
+mysql -h $DB_HOST \
+      -u $DB_USER \
+      -p$DB_PASSWORD \
+      $DB_NAME
 ```
 
 #### Node.js (mysql2)
@@ -49,11 +59,11 @@ const sequelize = new Sequelize(
 const mysql = require('mysql2');
 
 const pool = mysql.createPool({
-  host: 'server10.cloudswebserver.com',
-  user: 'myxenpay_studyproglobal',
-  password: 'Nazmuzsakib01715@@##',
-  database: 'myxenpay_studyproglobal',
-  port: 3306,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT || 3306,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
@@ -63,22 +73,23 @@ const pool = mysql.createPool({
 #### Python (MySQL Connector)
 ```python
 import mysql.connector
+import os
 
 db = mysql.connector.connect(
-    host="server10.cloudswebserver.com",
-    user="myxenpay_studyproglobal",
-    password="Nazmuzsakib01715@@##",
-    database="myxenpay_studyproglobal",
-    port=3306
+    host=os.getenv("DB_HOST"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    database=os.getenv("DB_NAME"),
+    port=int(os.getenv("DB_PORT", 3306))
 )
 ```
 
 #### PHP (PDO)
 ```php
-$host = 'server10.cloudswebserver.com';
-$db = 'myxenpay_studyproglobal';
-$user = 'myxenpay_studyproglobal';
-$pass = 'Nazmuzsakib01715@@##';
+$host = getenv('DB_HOST');
+$db = getenv('DB_NAME');
+$user = getenv('DB_USER');
+$pass = getenv('DB_PASSWORD');
 
 $dsn = "mysql:host=$host;dbname=$db;charset=utf8mb4";
 
@@ -92,35 +103,28 @@ try {
 }
 ```
 
-### Environment Variable Configuration
+### Security Best Practices
 
-These credentials are already configured in:
-- `Backend/.env.production`
-- `Backend/.env.example` (template)
+1. **Never commit credentials to version control**
+   - Use `.env` files (add to `.gitignore`)
+   - Use environment variables
+   - Use a secrets management system
 
-**Important**: The `.env.production` file contains the actual credentials. Make sure it's:
-1. ✅ Present on the production server
-2. ✅ Listed in `.gitignore` (already done)
-3. ❌ Never committed to version control
-4. ❌ Never shared publicly
+2. **Use strong passwords**
+   - At least 16 characters
+   - Mix of letters, numbers, and symbols
+   - Unique for each service
 
-### Security Recommendations
-
-1. **Change Database Password** (if possible)
-   - Contact your hosting provider to change the database password
-   - Update `.env.production` with the new password
-   - Restart the backend service
-
-2. **Restrict Database Access**
+3. **Restrict database access**
    - Configure MySQL to only accept connections from specific IPs
    - Use SSL/TLS for database connections if available
 
-3. **Regular Backups**
+4. **Regular backups**
    - Set up automated daily database backups
    - Store backups securely offsite
-   - See `Backend/DEPLOYMENT.md` Step 11.2 for backup script
+   - Test backup restoration regularly
 
-4. **Monitor Access**
+5. **Monitor access**
    - Enable MySQL query logging
    - Monitor for suspicious database activity
    - Set up alerts for failed login attempts
@@ -135,36 +139,21 @@ These credentials are already configured in:
 - [ ] Nginx installed and configured
 - [ ] SSL certificate obtained (Let's Encrypt)
 - [ ] Firewall configured (ports 22, 80, 443)
-- [ ] Backend `.env` file configured
+- [ ] Backend `.env` file configured with real credentials
 - [ ] Frontend deployed to web directory
 - [ ] PM2 process running
 - [ ] Domain DNS pointing to server
 
 ### Quick Test
 
-Test database connection:
+Test database connection (use your actual credentials from `.env`):
 
 ```bash
-# From command line
-mysql -h server10.cloudswebserver.com \
-      -u myxenpay_studyproglobal \
-      -p'Nazmuzsakib01715@@##' \
+# From command line - use environment variables
+mysql -h $DB_HOST \
+      -u $DB_USER \
+      -p$DB_PASSWORD \
       -e "SELECT VERSION(); SHOW DATABASES;"
-```
-
-Expected output:
-```
-+------------+
-| VERSION()  |
-+------------+
-| 8.0.x      |
-+------------+
-
-+----------------------------+
-| Database                   |
-+----------------------------+
-| myxenpay_studyproglobal    |
-+----------------------------+
 ```
 
 ### Troubleshooting
@@ -173,36 +162,18 @@ Expected output:
 
 **Check 1: Network connectivity**
 ```bash
-ping server10.cloudswebserver.com
-telnet server10.cloudswebserver.com 3306
+ping $DB_HOST
+telnet $DB_HOST 3306
 ```
 
 **Check 2: Credentials**
-- Verify username and password are correct
+- Verify username and password are correct in `.env`
 - Check if user has necessary privileges
 - Ensure database name is spelled correctly
 
 **Check 3: Firewall**
 - MySQL port 3306 must be accessible
 - Contact hosting provider if blocked
-
-#### Permission issues
-
-```sql
--- Check user permissions
-SHOW GRANTS FOR 'myxenpay_studyproglobal'@'%';
-
--- If needed, grant all privileges (requires admin access)
-GRANT ALL PRIVILEGES ON myxenpay_studyproglobal.* 
-TO 'myxenpay_studyproglobal'@'%';
-FLUSH PRIVILEGES;
-```
-
-### Support Contacts
-
-- **Hosting Provider**: server10.cloudswebserver.com support
-- **Database Admin**: Contact server administrator
-- **Project Lead**: admin@studyproglobal.com.bd
 
 ### Additional Resources
 
