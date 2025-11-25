@@ -288,7 +288,7 @@ node server.js
 # Test connection (use your credentials from .env)
 mysql -h $DB_HOST \
   -u $DB_USER \
-  -p$DB_PASSWORD
+  -p   # You will be prompted for your password
 ```
 
 ### API not responding
