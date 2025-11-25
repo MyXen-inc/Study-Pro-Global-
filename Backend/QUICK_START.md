@@ -199,11 +199,18 @@ Import sample data for testing:
 ./setup_database.sh
 # Choose option 2
 
-# Or manually (use your credentials from .env):
-mysql -h $DB_HOST \
-  -u $DB_USER \
-  -p$DB_PASSWORD \
-  $DB_NAME < sample_data.sql
+# Or manually (recommended: use a secure config file):
+# 1. Create a file ~/.my.cnf with the following content (replace values as needed):
+#    [client]
+#    user=your_db_user
+#    password=your_db_password
+#    host=your_db_host
+#
+# 2. Set file permissions to be readable only by you:
+#    chmod 600 ~/.my.cnf
+#
+# 3. Run the import command:
+mysql --defaults-extra-file=~/.my.cnf $DB_NAME < sample_data.sql
 ```
 
 This adds:
