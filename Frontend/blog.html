@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Study Pro Global Blog - Expert insights on studying abroad, university applications, scholarships, visa guidance, and international education tips.">
+    <meta name="keywords" content="study abroad blog, international education tips, university application guide, scholarship advice, visa guidance, study overseas articles">
+    
+    <!-- Enhanced SEO Meta Tags -->
+    <meta name="author" content="Study Pro Global - MyXen Foundation">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <link rel="canonical" href="https://www.studyproglobal.com.bd/blog">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.studyproglobal.com.bd/blog">
+    <meta property="og:title" content="Study Pro Global Blog - International Education Insights">
+    <meta property="og:description" content="Expert insights on studying abroad, university applications, scholarships, and visa guidance. Your trusted resource for international education.">
+    <meta property="og:image" content="https://www.studyproglobal.com.bd/images/blog-og-image.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.studyproglobal.com.bd/blog">
+    <meta property="twitter:title" content="Study Pro Global Blog - International Education Insights">
+    <meta property="twitter:description" content="Expert insights on studying abroad, university applications, scholarships, and visa guidance.">
+    <meta property="twitter:image" content="https://www.studyproglobal.com.bd/images/blog-og-image.jpg">
+    
+    <!-- Schema.org markup for Blog -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      "name": "Study Pro Global Blog",
+      "description": "Expert insights on studying abroad, university applications, scholarships, and international education",
+      "url": "https://www.studyproglobal.com.bd/blog",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Study Pro Global",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.studyproglobal.com.bd/images/logo.jpg"
+        }
+      }
+    }
+    </script>
+    
+    <title>Blog - Study Pro Global | International Education Insights</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/blog.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="images/logo.jpg" alt="Study Pro Global Logo" class="logo-img">
+                        <span>Study Pro Global</span>
+                    </a>
+                </div>
+                <div class="nav-toggle" id="navToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="index.html#universities" class="nav-link">Universities</a></li>
+                    <li><a href="index.html#scholarships" class="nav-link">Scholarships</a></li>
+                    <li><a href="index.html#courses" class="nav-link">Courses</a></li>
+                    <li><a href="blog.html" class="nav-link active">Blog</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact Us</a></li>
+                    <li><a href="index.html#register" class="btn-primary">Register Now</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Blog Header -->
+    <header class="blog-header">
+        <div class="container">
+            <h1>Study Pro Global Blog</h1>
+            <p>Expert insights, tips, and guidance for your international education journey</p>
+        </div>
+    </header>
+
+    <!-- Blog Content -->
+    <section class="blog-section">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="index.html">Home</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-current">Blog</span>
+            </nav>
+
+            <div class="blog-container">
+                <!-- Main Content -->
+                <main class="blog-main">
+                    <!-- Toolbar -->
+                    <div class="blog-toolbar">
+                        <div class="blog-results-count" id="resultsCount">
+                            Loading posts...
+                        </div>
+                        <div class="view-toggle">
+                            <button class="view-btn active" data-view="grid" aria-label="Grid view">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                            <button class="view-btn" data-view="list" aria-label="List view">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Blog Posts Container -->
+                    <div class="blog-posts-grid" id="blogPostsContainer">
+                        <!-- Posts will be loaded dynamically -->
+                        <div class="blog-loading">
+                            <div class="loading-spinner"></div>
+                            <p>Loading blog posts...</p>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination" id="blogPagination">
+                        <!-- Pagination will be loaded dynamically -->
+                    </div>
+                </main>
+
+                <!-- Sidebar -->
+                <aside class="blog-sidebar">
+                    <!-- Search Widget -->
+                    <div class="sidebar-widget">
+                        <h3>Search</h3>
+                        <form class="search-widget" id="blogSearchForm">
+                            <input type="text" placeholder="Search articles..." id="blogSearchInput" aria-label="Search blog posts">
+                            <button type="submit" aria-label="Search">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Categories Widget -->
+                    <div class="sidebar-widget">
+                        <h3>Categories</h3>
+                        <ul class="categories-list" id="categoriesList">
+                            <li>
+                                <a href="#" data-category="all">All Categories</a>
+                                <span class="category-count" id="allCount">-</span>
+                            </li>
+                            <!-- Categories will be loaded dynamically -->
+                        </ul>
+                    </div>
+
+                    <!-- Recent Posts Widget -->
+                    <div class="sidebar-widget">
+                        <h3>Recent Posts</h3>
+                        <div class="recent-posts-list" id="recentPostsList">
+                            <!-- Recent posts will be loaded dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Tags Widget -->
+                    <div class="sidebar-widget">
+                        <h3>Popular Tags</h3>
+                        <div class="tags-cloud" id="tagsCloud">
+                            <!-- Tags will be loaded dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Newsletter Widget -->
+                    <div class="sidebar-widget">
+                        <h3>Newsletter</h3>
+                        <p style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-color);">
+                            Subscribe to get the latest articles and tips delivered to your inbox.
+                        </p>
+                        <form id="newsletterForm" class="newsletter-form">
+                            <input type="email" placeholder="Your email address" required style="margin-bottom: 0.75rem;">
+                            <button type="submit" class="btn-primary" style="width: 100%;">Subscribe</button>
+                        </form>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Study Pro Global</h3>
+                    <p>Your trusted partner for international education. Making dreams of studying abroad a reality.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="index.html#about">About Us</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">University Rankings</a></li>
+                        <li><a href="#">Scholarship Database</a></li>
+                        <li><a href="#">Visa Guides</a></li>
+                        <li><a href="#">Application Tips</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> info@studyproglobal.com</li>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Available Online Worldwide</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; Study Pro Global is an Ed Tech platform of MyXen Foundation. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/blog.js"></script>
+</body>
+</html>

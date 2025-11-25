@@ -225,6 +225,76 @@ async function initializeDatabase() {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
     `);
 
+    // Blog posts table
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS blog_posts (
+        id VARCHAR(36) PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        slug VARCHAR(255) UNIQUE NOT NULL,
+        content LONGTEXT NOT NULL,
+        excerpt VARCHAR(300),
+        featured_image VARCHAR(500),
+        featured_image_alt VARCHAR(200),
+        meta_description VARCHAR(160),
+        focus_keyword VARCHAR(100),
+        author_id VARCHAR(36) NOT NULL,
+        status ENUM('draft', 'published', 'scheduled') DEFAULT 'draft',
+        published_at DATETIME,
+        scheduled_for DATETIME,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        views_count INT DEFAULT 0,
+        reading_time_minutes INT DEFAULT 5,
+        INDEX idx_slug (slug),
+        INDEX idx_status (status),
+        INDEX idx_published_at (published_at),
+        FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    `);
+
+    // Blog categories table
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS blog_categories (
+        id VARCHAR(36) PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        slug VARCHAR(100) UNIQUE NOT NULL,
+        description TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    `);
+
+    // Blog post categories junction table
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS blog_post_categories (
+        post_id VARCHAR(36),
+        category_id VARCHAR(36),
+        PRIMARY KEY (post_id, category_id),
+        FOREIGN KEY (post_id) REFERENCES blog_posts(id) ON DELETE CASCADE,
+        FOREIGN KEY (category_id) REFERENCES blog_categories(id) ON DELETE CASCADE
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    `);
+
+    // Blog tags table
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS blog_tags (
+        id VARCHAR(36) PRIMARY KEY,
+        name VARCHAR(50) NOT NULL,
+        slug VARCHAR(50) UNIQUE NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    `);
+
+    // Blog post tags junction table
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS blog_post_tags (
+        post_id VARCHAR(36),
+        tag_id VARCHAR(36),
+        PRIMARY KEY (post_id, tag_id),
+        FOREIGN KEY (post_id) REFERENCES blog_posts(id) ON DELETE CASCADE,
+        FOREIGN KEY (tag_id) REFERENCES blog_tags(id) ON DELETE CASCADE
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    `);
+
     console.log('✅ Database tables initialized successfully');
     connection.release();
     return true;

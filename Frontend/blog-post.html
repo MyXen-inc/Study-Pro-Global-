@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Dynamic meta tags will be updated by JavaScript -->
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="Study Pro Global - MyXen Foundation">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    
+    <!-- Open Graph / Facebook - will be updated dynamically -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="">
+    <meta property="og:title" content="">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="">
+    
+    <!-- Twitter - will be updated dynamically -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="">
+    <meta property="twitter:title" content="">
+    <meta property="twitter:description" content="">
+    <meta property="twitter:image" content="">
+    
+    <!-- Canonical URL - will be updated dynamically -->
+    <link rel="canonical" href="">
+    
+    <!-- Schema.org Article markup - will be injected dynamically -->
+    <script type="application/ld+json" id="articleSchema">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "",
+      "image": "",
+      "author": {
+        "@type": "Person",
+        "name": ""
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Study Pro Global",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.studyproglobal.com.bd/images/logo.jpg"
+        }
+      },
+      "datePublished": "",
+      "dateModified": "",
+      "description": ""
+    }
+    </script>
+    
+    <title>Blog Post - Study Pro Global</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/blog.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="images/logo.jpg" alt="Study Pro Global Logo" class="logo-img">
+                        <span>Study Pro Global</span>
+                    </a>
+                </div>
+                <div class="nav-toggle" id="navToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="index.html#universities" class="nav-link">Universities</a></li>
+                    <li><a href="index.html#scholarships" class="nav-link">Scholarships</a></li>
+                    <li><a href="index.html#courses" class="nav-link">Courses</a></li>
+                    <li><a href="blog.html" class="nav-link active">Blog</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact Us</a></li>
+                    <li><a href="index.html#register" class="btn-primary">Register Now</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Blog Post Header -->
+    <header class="blog-post-header" id="postHeader">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb" aria-label="Breadcrumb" style="margin-bottom: 1.5rem;">
+                <a href="index.html" style="color: rgba(255,255,255,0.8);">Home</a>
+                <span class="breadcrumb-separator" style="color: rgba(255,255,255,0.5);">/</span>
+                <a href="blog.html" style="color: rgba(255,255,255,0.8);">Blog</a>
+                <span class="breadcrumb-separator" style="color: rgba(255,255,255,0.5);">/</span>
+                <span class="breadcrumb-current" id="breadcrumbTitle">Loading...</span>
+            </nav>
+            
+            <div class="blog-post-meta" id="postMeta">
+                <span><i class="fas fa-folder"></i> <span id="postCategory">-</span></span>
+                <span><i class="fas fa-calendar"></i> <span id="postDate">-</span></span>
+                <span><i class="fas fa-user"></i> <span id="postAuthor">-</span></span>
+                <span><i class="fas fa-clock"></i> <span id="postReadTime">-</span> min read</span>
+                <span><i class="fas fa-eye"></i> <span id="postViews">-</span> views</span>
+            </div>
+            
+            <h1 class="blog-post-title" id="postTitle">Loading...</h1>
+            <p class="blog-post-excerpt" id="postExcerpt"></p>
+        </div>
+    </header>
+
+    <!-- Featured Image -->
+    <div class="blog-post-featured-image" id="featuredImageContainer" style="display: none;">
+        <img src="" alt="" id="featuredImage">
+    </div>
+
+    <!-- Blog Post Content -->
+    <section class="blog-section blog-post-page">
+        <div class="blog-post-container">
+            <div class="blog-post-content" id="postContent">
+                <!-- Loading State -->
+                <div class="blog-loading" id="postLoading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading article...</p>
+                </div>
+                
+                <!-- Table of Contents (auto-generated) -->
+                <div class="table-of-contents" id="tableOfContents" style="display: none;">
+                    <h4><i class="fas fa-list"></i> Table of Contents</h4>
+                    <ul id="tocList"></ul>
+                </div>
+                
+                <!-- Article Content -->
+                <article id="articleContent" style="display: none;">
+                    <!-- Content will be rendered here -->
+                </article>
+                
+                <!-- Post Footer -->
+                <div class="blog-post-footer" id="postFooter" style="display: none;">
+                    <!-- Tags -->
+                    <div class="post-tags" id="postTags">
+                        <span>Tags:</span>
+                        <!-- Tags will be loaded dynamically -->
+                    </div>
+                    
+                    <!-- Social Share -->
+                    <div class="social-share">
+                        <span>Share this article:</span>
+                        <div class="share-buttons">
+                            <a href="#" class="share-btn facebook" id="shareFacebook" aria-label="Share on Facebook" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="share-btn twitter" id="shareTwitter" aria-label="Share on Twitter" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="share-btn linkedin" id="shareLinkedIn" aria-label="Share on LinkedIn" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" class="share-btn whatsapp" id="shareWhatsApp" aria-label="Share on WhatsApp" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <button class="share-btn print" id="printBtn" aria-label="Print article">
+                                <i class="fas fa-print"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Author Bio -->
+                <div class="author-bio" id="authorBio" style="display: none;">
+                    <div class="author-avatar">
+                        <img src="images/default-avatar.png" alt="" id="authorAvatar">
+                    </div>
+                    <div class="author-info">
+                        <h4 id="authorName">-</h4>
+                        <p id="authorDescription">-</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Related Posts -->
+            <div class="related-posts" id="relatedPosts" style="display: none;">
+                <h3>Related Articles</h3>
+                <div class="related-posts-grid" id="relatedPostsGrid">
+                    <!-- Related posts will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Study Pro Global</h3>
+                    <p>Your trusted partner for international education. Making dreams of studying abroad a reality.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="index.html#about">About Us</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">University Rankings</a></li>
+                        <li><a href="#">Scholarship Database</a></li>
+                        <li><a href="#">Visa Guides</a></li>
+                        <li><a href="#">Application Tips</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> info@studyproglobal.com</li>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Available Online Worldwide</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; Study Pro Global is an Ed Tech platform of MyXen Foundation. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Marked.js for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- DOMPurify for HTML sanitization -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+    <!-- Highlight.js for code syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/blog.js"></script>
+</body>
+</html>

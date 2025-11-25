@@ -45,6 +45,7 @@ const paymentRoutes = require('./routes/payments');
 const scholarshipRoutes = require('./routes/scholarships');
 const courseRoutes = require('./routes/courses');
 const chatRoutes = require('./routes/chat');
+const blogRoutes = require('./routes/blog');
 
 // API routes
 app.use('/api/v1/auth', authRoutes);
@@ -56,6 +57,7 @@ app.use('/api/v1/payments', paymentRoutes);
 app.use('/api/v1/scholarships', scholarshipRoutes);
 app.use('/api/v1/courses', courseRoutes);
 app.use('/api/v1/chat', chatRoutes);
+app.use('/api/v1/blog', blogRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
