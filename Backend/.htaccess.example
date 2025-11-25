@@ -1,0 +1,38 @@
+# =============================================================================
+# SUBDOMAIN CONFIGURATION FOR STUDY PRO GLOBAL
+# =============================================================================
+# This project uses multiple subdomains:
+# - www.studyproglobal.com.bd          → Frontend (public_html)
+# - api.studyproglobal.com.bd          → Backend API (Node.js on port 3000)
+# - mobile.studyproglobal.com.bd       → Mobile app
+# - studypro-backend.studyproglobal.com.bd → Backend admin dashboard
+#
+# SETUP INSTRUCTIONS:
+# 1. In cPanel, create subdomains for api, mobile, and studypro-backend
+# 2. Point api.studyproglobal.com.bd to port 3000 using Node.js app setup in cPanel
+# 3. Or use ProxyPass in Apache configuration (see below)
+# =============================================================================
+
+# OPTION 1: If using Apache ProxyPass (requires mod_proxy enabled)
+# Place this in api.studyproglobal.com.bd/.htaccess
+# RewriteEngine On
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^(.*)$ http://localhost:3000/$1 [P,L]
+
+# OPTION 2: If using cPanel Node.js Application
+# 1. Go to cPanel → Setup Node.js App
+# 2. Create application:
+#    - Node.js version: 16.x or higher
+#    - Application mode: Production
+#    - Application root: /home/myxenpay/studypro-backend
+#    - Application URL: api.studyproglobal.com.bd
+#    - Application startup file: server.js
+#    - Port: 3000
+# 3. Click "Create" and then "Run NPM Install"
+# 4. Start the application
+
+# OPTION 3: Legacy - Proxy through main domain (NOT RECOMMENDED for production)
+# Place this in /home/myxenpay/studyproglobal.com.bd/.htaccess
+# RewriteEngine On
+# RewriteRule ^api/(.*)$ http://localhost:3000/api/$1 [P,L]

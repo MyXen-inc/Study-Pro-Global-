@@ -92,7 +92,7 @@ const AdminState = {
  * Check if user is authenticated as admin
  */
 async function checkAdminAuth() {
-    const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+    const token = localStorage.getItem('studypro_token');
     
     if (!token) {
         redirectToLogin();
@@ -133,7 +133,7 @@ function redirectToLogin() {
  * Get auth token
  */
 function getAuthToken() {
-    return localStorage.getItem('authToken') || sessionStorage.getItem('authToken') || '';
+    return localStorage.getItem('studypro_token') || '';
 }
 
 // =============================================================================
@@ -297,8 +297,7 @@ function setupEventListeners() {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            localStorage.removeItem('authToken');
-            sessionStorage.removeItem('authToken');
+            localStorage.removeItem('studypro_token');
             window.location.href = 'index.html';
         });
     }

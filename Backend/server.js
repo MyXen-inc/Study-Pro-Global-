@@ -15,7 +15,15 @@ app.use(compression());
 
 // CORS configuration
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN || 'https://www.studyproglobal.com.bd',
+  origin: [
+    'https://www.studyproglobal.com.bd',
+    'https://studyproglobal.com.bd',
+    'https://api.studyproglobal.com.bd',
+    'https://mobile.studyproglobal.com.bd',
+    'https://studypro-backend.studyproglobal.com.bd',
+    'http://localhost:3000',
+    'http://localhost:5500'
+  ],
   credentials: true,
   optionsSuccessStatus: 200
 };
@@ -60,12 +68,22 @@ app.use('/api/v1/chat', chatRoutes);
 app.use('/api/v1/blog', blogRoutes);
 
 // Health check endpoint
-app.get('/api/health', (req, res) => {
+app.get('/api/health', async (req, res) => {
+  let dbStatus = 'unknown';
+  try {
+    const { pool } = require('./config/database');
+    await pool.query('SELECT 1');
+    dbStatus = 'connected';
+  } catch (e) {
+    dbStatus = 'disconnected';
+  }
+  
   res.json({
     success: true,
-    message: 'Study Pro Global API is running',
-    timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development'
+    message: 'Study Pro Global API',
+    environment: process.env.NODE_ENV || 'development',
+    database: dbStatus,
+    timestamp: new Date().toISOString()
   });
 });
 
