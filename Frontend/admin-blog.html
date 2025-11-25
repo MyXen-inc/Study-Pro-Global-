@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-TKX7Z237');</script>
+    <!-- End Google Tag Manager -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="Admin Blog Management - Study Pro Global">
+    
+    <title>Blog Admin - Study Pro Global</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/blog.css">
+    <link rel="stylesheet" href="css/blog-admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-blog-page">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TKX7Z237"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="images/logo.jpg" alt="Study Pro Global Logo" class="logo-img">
+                        <span>Study Pro Global</span>
+                    </a>
+                </div>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="blog.html" class="nav-link">View Blog</a></li>
+                    <li><a href="#" class="nav-link" id="logoutBtn">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <div class="container">
+            <div class="admin-header-content">
+                <h1 class="admin-title">
+                    <i class="fas fa-edit"></i>
+                    <span id="editorTitle">Create New Blog Post</span>
+                </h1>
+                <div class="admin-actions">
+                    <span class="autosave-status" id="autosaveStatus">
+                        <i class="fas fa-check-circle"></i>
+                        <span>All changes saved</span>
+                    </span>
+                    <button class="btn-preview" id="previewBtn">
+                        <i class="fas fa-eye"></i>
+                        Preview
+                    </button>
+                    <button class="btn-save" id="saveDraftBtn">
+                        <i class="fas fa-save"></i>
+                        Save Draft
+                    </button>
+                    <button class="btn-publish" id="publishBtn">
+                        <i class="fas fa-paper-plane"></i>
+                        Publish
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Container -->
+    <div class="admin-container">
+        <div class="container">
+            <div class="blog-editor-container">
+                <!-- Main Editor -->
+                <div class="editor-main">
+                    <!-- Title -->
+                    <div class="editor-card">
+                        <div class="form-group">
+                            <input type="text" 
+                                   class="form-input title-input" 
+                                   id="postTitle" 
+                                   placeholder="Enter your post title..."
+                                   maxlength="255"
+                                   required>
+                            <div class="char-counter">
+                                <span class="char-count" id="titleCharCount">0/255</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- URL Slug -->
+                    <div class="editor-card">
+                        <div class="editor-card-header">
+                            <span class="editor-card-title">
+                                <i class="fas fa-link"></i>
+                                URL Slug
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <div class="slug-input-group">
+                                <span class="slug-prefix">/blog/</span>
+                                <input type="text" 
+                                       class="form-input" 
+                                       id="postSlug" 
+                                       placeholder="post-url-slug">
+                                <button type="button" class="slug-regenerate" id="regenerateSlug" title="Regenerate from title">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                            <p class="form-hint">The URL-friendly version of the title. Auto-generated from title.</p>
+                        </div>
+                    </div>
+
+                    <!-- Content Editor -->
+                    <div class="editor-card">
+                        <div class="editor-card-header">
+                            <span class="editor-card-title">
+                                <i class="fas fa-file-alt"></i>
+                                Content
+                            </span>
+                        </div>
+                        <div class="markdown-editor">
+                            <!-- Toolbar -->
+                            <div class="markdown-toolbar">
+                                <div class="markdown-toolbar-group">
+                                    <button type="button" class="toolbar-btn" data-action="bold" title="Bold (Ctrl+B)">
+                                        <i class="fas fa-bold"></i>
+                                    </button>
+                                    <button type="button" class="toolbar-btn" data-action="italic" title="Italic (Ctrl+I)">
+                                        <i class="fas fa-italic"></i>
+                                    </button>
+                                    <button type="button" class="toolbar-btn" data-action="strikethrough" title="Strikethrough">
+                                        <i class="fas fa-strikethrough"></i>
+                                    </button>
+                                </div>
+                                <div class="markdown-toolbar-group">
+                                    <button type="button" class="toolbar-btn" data-action="h1" title="Heading 1">
+                                        H1
+                                    </button>
+                                    <button type="button" class="toolbar-btn" data-action="h2" title="Heading 2">
+                                        H2
+                                    </button>
+                                    <button type="button" class="toolbar-btn" data-action="h3" title="Heading 3">
+                                        H3
+                                    </button>
+                                </div>
+                                <div class="markdown-toolbar-group">
+                                    <button type="button" class="toolbar-btn" data-action="ul" title="Bullet List">
+                                        <i class="fas fa-list-ul"></i>
+                                    </button>
+                                    <button type="button" class="toolbar-btn" data-action="ol" title="Numbered List">
+                                        <i class="fas fa-list-ol"></i>
+                                    </button>
+                                    <button type="button" class="toolbar-btn" data-action="quote" title="Blockquote">
+                                        <i class="fas fa-quote-right"></i>
+                                    </button>
+                                </div>
+                                <div class="markdown-toolbar-group">
+                                    <button type="button" class="toolbar-btn" data-action="link" title="Insert Link">
+                                        <i class="fas fa-link"></i>
+                                    </button>
+                                    <button type="button" class="toolbar-btn" data-action="image" title="Insert Image">
+                                        <i class="fas fa-image"></i>
+                                    </button>
+                                    <button type="button" class="toolbar-btn" data-action="code" title="Code Block">
+                                        <i class="fas fa-code"></i>
+                                    </button>
+                                </div>
+                                <div class="markdown-toolbar-group">
+                                    <button type="button" class="toolbar-btn" data-action="hr" title="Horizontal Rule">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <button type="button" class="toolbar-btn" data-action="table" title="Insert Table">
+                                        <i class="fas fa-table"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Editor and Preview -->
+                            <div class="markdown-content">
+                                <div class="markdown-input-wrapper">
+                                    <div class="markdown-label">Markdown</div>
+                                    <textarea class="markdown-input" 
+                                              id="postContent" 
+                                              placeholder="Write your blog post content here using Markdown..."></textarea>
+                                </div>
+                                <div class="markdown-preview-wrapper">
+                                    <div class="markdown-label">Preview</div>
+                                    <div class="markdown-preview" id="contentPreview">
+                                        <p style="color: var(--text-color); font-style: italic;">
+                                            Start typing to see the preview...
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Excerpt -->
+                    <div class="editor-card">
+                        <div class="editor-card-header">
+                            <span class="editor-card-title">
+                                <i class="fas fa-align-left"></i>
+                                Excerpt
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-textarea" 
+                                      id="postExcerpt" 
+                                      placeholder="Write a short summary of your post (optional)..."
+                                      maxlength="300"
+                                      rows="3"></textarea>
+                            <div class="char-counter">
+                                <span class="char-count" id="excerptCharCount">0/300</span>
+                                <span class="char-limit">Recommended: 150-200 characters</span>
+                            </div>
+                            <p class="form-hint">If left empty, the first 150 characters of the content will be used.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="editor-sidebar">
+                    <!-- Publish Options -->
+                    <div class="editor-card">
+                        <div class="editor-card-header">
+                            <span class="editor-card-title">
+                                <i class="fas fa-cog"></i>
+                                Publish Options
+                            </span>
+                        </div>
+                        <div class="publish-options">
+                            <div class="publish-status">
+                                <label class="status-option active" data-status="draft">
+                                    <input type="radio" name="postStatus" value="draft" checked>
+                                    <i class="fas fa-file"></i>
+                                    <span>Draft</span>
+                                </label>
+                                <label class="status-option" data-status="published">
+                                    <input type="radio" name="postStatus" value="published">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Publish</span>
+                                </label>
+                                <label class="status-option" data-status="scheduled">
+                                    <input type="radio" name="postStatus" value="scheduled">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Schedule</span>
+                                </label>
+                            </div>
+                            <div class="schedule-input" id="scheduleInput" style="display: none;">
+                                <input type="datetime-local" 
+                                       class="form-input" 
+                                       id="scheduleDate">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Featured Image -->
+                    <div class="editor-card">
+                        <div class="editor-card-header">
+                            <span class="editor-card-title">
+                                <i class="fas fa-image"></i>
+                                Featured Image
+                            </span>
+                        </div>
+                        <div class="image-upload-area" id="featuredImageUpload">
+                            <input type="file" 
+                                   id="featuredImageInput" 
+                                   accept="image/jpeg,image/png,image/webp">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <p class="upload-text">Drop image here or click to upload</p>
+                            <p class="upload-hint">JPEG, PNG, or WebP (max 5MB)</p>
+                        </div>
+                        <div class="image-preview" id="featuredImagePreview" style="display: none;">
+                            <img src="" alt="Featured image preview" id="featuredImagePreviewImg">
+                            <button type="button" class="image-preview-remove" id="removeFeaturedImage">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="form-group" style="margin-top: 1rem;">
+                            <label class="form-label">Alt Text</label>
+                            <input type="text" 
+                                   class="form-input" 
+                                   id="featuredImageAlt" 
+                                   placeholder="Describe the image for accessibility...">
+                        </div>
+                    </div>
+
+                    <!-- SEO Settings -->
+                    <div class="editor-card">
+                        <div class="editor-card-header">
+                            <span class="editor-card-title">
+                                <i class="fas fa-search"></i>
+                                SEO Settings
+                            </span>
+                        </div>
+                        
+                        <!-- SEO Score -->
+                        <div class="seo-score" id="seoScore">
+                            <div class="seo-score-circle medium" id="seoScoreCircle">65</div>
+                            <div class="seo-score-details">
+                                <h4>SEO Score</h4>
+                                <p id="seoScoreText">Good - Some improvements possible</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 1rem;">
+                            <label class="form-label">Meta Description <span class="required">*</span></label>
+                            <textarea class="form-textarea" 
+                                      id="metaDescription" 
+                                      placeholder="Write a compelling meta description..."
+                                      maxlength="160"
+                                      rows="3"></textarea>
+                            <div class="char-counter">
+                                <span class="char-count" id="metaCharCount">0/160</span>
+                                <span class="char-limit">Recommended: 150-160 characters</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Focus Keyword</label>
+                            <input type="text" 
+                                   class="form-input" 
+                                   id="focusKeyword" 
+                                   placeholder="e.g., study abroad scholarships">
+                            <p class="form-hint">The main keyword you want this post to rank for.</p>
+                        </div>
+
+                        <!-- SEO Checklist -->
+                        <div class="seo-checklist" id="seoChecklist">
+                            <div class="seo-check-item">
+                                <span class="seo-check-icon fail" id="checkTitle"><i class="fas fa-times"></i></span>
+                                <span class="seo-check-text">Title contains focus keyword</span>
+                            </div>
+                            <div class="seo-check-item">
+                                <span class="seo-check-icon fail" id="checkMeta"><i class="fas fa-times"></i></span>
+                                <span class="seo-check-text">Meta description set (150-160 chars)</span>
+                            </div>
+                            <div class="seo-check-item">
+                                <span class="seo-check-icon fail" id="checkImage"><i class="fas fa-times"></i></span>
+                                <span class="seo-check-text">Featured image with alt text</span>
+                            </div>
+                            <div class="seo-check-item">
+                                <span class="seo-check-icon fail" id="checkContent"><i class="fas fa-times"></i></span>
+                                <span class="seo-check-text">Content length (300+ words)</span>
+                            </div>
+                            <div class="seo-check-item">
+                                <span class="seo-check-icon fail" id="checkHeadings"><i class="fas fa-times"></i></span>
+                                <span class="seo-check-text">Uses subheadings (H2, H3)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Categories -->
+                    <div class="editor-card">
+                        <div class="editor-card-header">
+                            <span class="editor-card-title">
+                                <i class="fas fa-folder"></i>
+                                Category
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-select" id="postCategory">
+                                <option value="">Select a category</option>
+                                <option value="study-abroad">Study Abroad</option>
+                                <option value="scholarships">Scholarships</option>
+                                <option value="visa-guide">Visa Guide</option>
+                                <option value="university-tips">University Tips</option>
+                                <option value="career-advice">Career Advice</option>
+                                <option value="student-life">Student Life</option>
+                                <option value="test-preparation">Test Preparation</option>
+                                <option value="news">News & Updates</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="editor-card">
+                        <div class="editor-card-header">
+                            <span class="editor-card-title">
+                                <i class="fas fa-tags"></i>
+                                Tags
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <div class="tags-input-wrapper" id="tagsInputWrapper">
+                                <input type="text" 
+                                       class="tags-input" 
+                                       id="tagsInput" 
+                                       placeholder="Add tags...">
+                            </div>
+                            <p class="form-hint">Press Enter or comma to add a tag</p>
+                        </div>
+                    </div>
+
+                    <!-- Delete Post (only visible when editing) -->
+                    <div class="editor-card" id="deleteCard" style="display: none;">
+                        <button type="button" class="btn-delete" id="deleteBtn" style="width: 100%;">
+                            <i class="fas fa-trash-alt"></i>
+                            Delete Post
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Marked.js for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js" 
+            integrity="sha384-qgVBlHNYLNVLPf0e5s8NnBFCVL8XiKlqCmC0EoLoHPPg8HlhwkPOFKMM7VeqwE35" 
+            crossorigin="anonymous"></script>
+    <!-- DOMPurify for HTML sanitization -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js" 
+            integrity="sha384-VzS7hIeKv+CxCaO3IiYG3s1iVXdB8x9sQs3E5p4g3lnPVmABdRQWoOaEMPL06nxG" 
+            crossorigin="anonymous"></script>
+    <script src="js/script.js"></script>
+    <script src="js/blog-admin.js"></script>
+</body>
+</html>
