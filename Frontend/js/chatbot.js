@@ -514,8 +514,10 @@ async function loadConversationHistory(conversationId) {
         const data = await response.json();
         
         if (data.success && data.data.messages) {
-            // Clear current messages
-            ChatBot.elements.messagesContainer.innerHTML = '';
+            // Clear current messages safely (without innerHTML)
+            while (ChatBot.elements.messagesContainer.firstChild) {
+                ChatBot.elements.messagesContainer.removeChild(ChatBot.elements.messagesContainer.firstChild);
+            }
             ChatBot.messages = [];
             
             // Add each message (safely)

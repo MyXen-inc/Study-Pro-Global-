@@ -51,6 +51,23 @@ function renderMarkdown(markdown) {
     return escapeHtml(markdown);
 }
 
+/**
+ * Validate URL to ensure it uses safe protocols
+ * @param {string} url - The URL to validate
+ * @returns {boolean} - Whether the URL is valid and safe
+ */
+function isValidUrl(url) {
+    if (!url || typeof url !== 'string') return false;
+    
+    try {
+        const parsed = new URL(url);
+        // Only allow http and https protocols
+        return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+    } catch {
+        return false;
+    }
+}
+
 // =============================================================================
 // ADMIN STATE
 // =============================================================================
@@ -625,14 +642,18 @@ function applyMarkdownAction(action) {
             break;
         case 'link':
             const url = prompt('Enter URL:', 'https://');
-            if (url) {
+            if (url && isValidUrl(url)) {
                 replacement = `[${selectedText || 'link text'}](${url})`;
+            } else if (url) {
+                alert('Please enter a valid URL starting with http:// or https://');
             }
             break;
         case 'image':
             const imgUrl = prompt('Enter image URL:', 'https://');
-            if (imgUrl) {
+            if (imgUrl && isValidUrl(imgUrl)) {
                 replacement = `![${selectedText || 'alt text'}](${imgUrl})`;
+            } else if (imgUrl) {
+                alert('Please enter a valid image URL starting with http:// or https://');
             }
             break;
         case 'code':
