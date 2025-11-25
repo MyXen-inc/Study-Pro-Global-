@@ -30,6 +30,18 @@ const CONFIG = {
     REFRESH_THRESHOLD: 3600000
   },
 
+  // Payment Configuration
+  PAYMENT: {
+    // $myxn Token wallet address for crypto payments
+    CRYPTO_WALLET: 'CHXoAEvTi3FAEZMkWDJJmUSRXxYAoeco4bDMDZQJVWen',
+    
+    // Supported payment methods
+    METHODS: {
+      CRYPTO: 'myxn_token',
+      CARD: 'credit_card'
+    }
+  },
+
   // Application Settings
   APP: {
     NAME: 'Study Pro Global',
@@ -124,6 +136,7 @@ const CONFIG = {
 Object.freeze(CONFIG);
 Object.freeze(CONFIG.API);
 Object.freeze(CONFIG.AUTH);
+Object.freeze(CONFIG.PAYMENT);
 Object.freeze(CONFIG.APP);
 Object.freeze(CONFIG.FEATURES);
 Object.freeze(CONFIG.PLANS);
