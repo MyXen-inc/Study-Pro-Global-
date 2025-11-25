@@ -25,6 +25,7 @@ function escapeHtml(str) {
 
 /**
  * Sanitize user input by removing potentially dangerous content
+ * Uses iterative approach to handle nested/malformed tags
  * @param {string} input - The input to sanitize
  * @returns {string} - The sanitized input
  */
@@ -32,8 +33,16 @@ function sanitizeInput(input) {
     if (typeof input !== 'string') {
         return '';
     }
-    // Remove any HTML tags and trim whitespace
-    return input.replace(/<[^>]*>/g, '').trim();
+    
+    // Iteratively remove HTML tags to handle nested cases
+    let sanitized = input;
+    let previousLength;
+    do {
+        previousLength = sanitized.length;
+        sanitized = sanitized.replace(/<[^>]*>/g, '');
+    } while (sanitized.length !== previousLength);
+    
+    return sanitized.trim();
 }
 
 // =============================================================================

@@ -657,12 +657,18 @@ function applyMarkdownAction(action) {
 
     if (replacement) {
         textarea.focus();
-        document.execCommand('insertText', false, replacement);
         
-        // Update cursor position
-        if (cursorOffset) {
-            textarea.selectionStart = textarea.selectionEnd = end + replacement.length + cursorOffset;
-        }
+        // Use modern approach instead of deprecated execCommand
+        const beforeText = textarea.value.substring(0, start);
+        const afterText = textarea.value.substring(end);
+        textarea.value = beforeText + replacement + afterText;
+        
+        // Set cursor position
+        const newCursorPos = start + replacement.length + (cursorOffset || 0);
+        textarea.selectionStart = textarea.selectionEnd = newCursorPos;
+        
+        // Trigger input event for any listeners
+        textarea.dispatchEvent(new Event('input', { bubbles: true }));
 
         updatePreview();
         markDirty();

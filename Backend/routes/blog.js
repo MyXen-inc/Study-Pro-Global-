@@ -67,17 +67,50 @@ function generateExcerpt(content, length = 150) {
 }
 
 /**
- * Sanitize user input to prevent XSS
+ * Escape HTML special characters to prevent XSS
+ * This is the safest approach - convert special chars to HTML entities
+ * @param {string} input - Input to escape
+ * @returns {string} - Escaped string safe for HTML output
+ */
+function escapeHtml(input) {
+  if (typeof input !== 'string') return '';
+  
+  const htmlEscapeMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    '/': '&#x2F;'
+  };
+  
+  return input.replace(/[&<>"'/]/g, char => htmlEscapeMap[char]);
+}
+
+/**
+ * Sanitize user input for storage
+ * For markdown content, we allow the raw content but escape on output
+ * For other fields, we escape HTML entities
  * @param {string} input - Input to sanitize
+ * @param {boolean} allowMarkdown - Whether to preserve markdown (for content field)
  * @returns {string} - Sanitized input
  */
-function sanitizeInput(input) {
+function sanitizeInput(input, allowMarkdown = false) {
   if (typeof input !== 'string') return '';
-  return input
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/javascript:/gi, '')
-    .replace(/on\w+\s*=/gi, '');
+  
+  if (allowMarkdown) {
+    // For markdown content, we store raw but the frontend will
+    // use DOMPurify to sanitize rendered HTML
+    // Only remove the most dangerous inline scripts
+    return input
+      .replace(/<script[\s\S]*?<\/script\s*>/gi, '')
+      .replace(/<script[\s\S]*?>/gi, '');
+  }
+  
+  // For non-markdown fields, escape all HTML
+  return escapeHtml(input);
 }
+
 
 // =============================================================================
 // PUBLIC ENDPOINTS
@@ -416,12 +449,12 @@ router.post('/posts', verifyToken, requireAdmin, [
       featured_image, featured_image_alt, category, tags, status, scheduled_for
     } = req.body;
 
-    // Sanitize inputs
-    const sanitizedTitle = sanitizeInput(title);
-    const sanitizedContent = sanitizeInput(content);
+    // Sanitize inputs - title is escaped, content allows markdown
+    const sanitizedTitle = sanitizeInput(title, false);
+    const sanitizedContent = sanitizeInput(content, true);
 
     // Generate slug if not provided
-    const postSlug = slug || generateSlug(sanitizedTitle);
+    const postSlug = slug || generateSlug(title);
 
     // Check slug uniqueness
     const [existing] = await pool.query(
@@ -571,7 +604,9 @@ router.put('/posts/:id', verifyToken, requireAdmin, [
     for (const field of allowedFields) {
       if (updates[field] !== undefined) {
         updateFields.push(`${field} = ?`);
-        updateValues.push(sanitizeInput(updates[field]));
+        // Allow markdown for content field, escape HTML for others
+        const allowMarkdown = field === 'content';
+        updateValues.push(sanitizeInput(updates[field], allowMarkdown));
       }
     }
 
